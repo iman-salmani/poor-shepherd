@@ -15,6 +15,7 @@ config/description="A Shepherd with his sheep trying to survive the night while 
 config/tags=PackedStringArray("jam")
 run/main_scene="uid://cf6ryk82n8bbu"
 config/features=PackedStringArray("4.5", "GL Compatibility")
+boot_splash/image="uid://8bkhrmw3ix8"
 config/icon="uid://bytn0bot7ifg0"
 
 [autoload]
