@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dh8xchvhevxta"]
+
+[ext_resource type="Texture2D" uid="uid://b4yyh4wn32yh0" path="res://assets/tree.png" id="1_1nrm2"]
+[ext_resource type="Script" uid="uid://cid7huv8gfo1u" path="res://tree/tree.gd" id="1_tqxsf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1nrm2"]
+size = Vector2(9, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tqxsf"]
+size = Vector2(9, 18)
+
+[node name="Tree" type="StaticBody2D"]
+script = ExtResource("1_tqxsf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -15)
+texture = ExtResource("1_1nrm2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(-0.5, -3.5)
+shape = SubResource("RectangleShape2D_1nrm2")
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(-0.5, -9)
+shape = SubResource("RectangleShape2D_tqxsf")
+
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

@@ -1,0 +1,113 @@
+[gd_scene load_steps=16 format=3 uid="uid://bc1mr3tkohrqp"]
+
+[ext_resource type="Script" uid="uid://db8cyat1p83tp" path="res://campfire/campfire.gd" id="1_6rc7x"]
+[ext_resource type="Texture2D" uid="uid://cg1uphionm080" path="res://assets/campfire-animation.png" id="1_qw3k3"]
+[ext_resource type="AudioStream" uid="uid://c831c7llbma84" path="res://assets/campfire.wav" id="3_0g46y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rc7x"]
+atlas = ExtResource("1_qw3k3")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0g46y"]
+atlas = ExtResource("1_qw3k3")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gjsw"]
+atlas = ExtResource("1_qw3k3")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ixws"]
+atlas = ExtResource("1_qw3k3")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pseos"]
+atlas = ExtResource("1_qw3k3")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e6u7l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rc7x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0g46y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gjsw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ixws")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pseos")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e6u7l"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0g46y"]
+radius = 21.023796
+
+[sub_resource type="Gradient" id="Gradient_0g46y"]
+offsets = PackedFloat32Array(0, 0.014084518, 0.3097015, 0.6604478)
+colors = PackedColorArray(0.2, 0.2, 0.2, 1, 0.26666668, 0.26666668, 0.26666668, 1, 0.13043478, 0.13043478, 0.13043478, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2gjsw"]
+gradient = SubResource("Gradient_0g46y")
+width = 80
+height = 80
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_2gjsw"]
+offsets = PackedFloat32Array(0, 0.7253521)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ixws"]
+gradient = SubResource("Gradient_2gjsw")
+width = 24
+height = 24
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Campfire" type="StaticBody2D"]
+script = ExtResource("1_6rc7x")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+light_mask = 2
+sprite_frames = SubResource("SpriteFrames_e6u7l")
+autoplay = "default"
+frame_progress = 0.83851135
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_e6u7l")
+
+[node name="BurningTimer" type="Timer" parent="."]
+wait_time = 1.2999999999999998
+autostart = true
+
+[node name="FuelArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FuelArea"]
+shape = SubResource("CircleShape2D_0g46y")
+
+[node name="OutsideLight" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_2gjsw")
+texture_scale = 2.0
+
+[node name="InsideLight" type="PointLight2D" parent="."]
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_4ixws")
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_0g46y")
+
+[connection signal="timeout" from="BurningTimer" to="." method="_on_burning_timer_timeout"]
+[connection signal="body_entered" from="FuelArea" to="." method="_on_fuel_area_body_entered"]

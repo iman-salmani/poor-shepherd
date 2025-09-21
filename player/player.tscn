@@ -1,0 +1,107 @@
+[gd_scene load_steps=14 format=3 uid="uid://1jhdt1f1f6nt"]
+
+[ext_resource type="Script" uid="uid://5oj06xodtvpj" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="Texture2D" uid="uid://45llt6y8v8ni" path="res://assets/shepherd.png" id="2_g1dw6"]
+[ext_resource type="Texture2D" uid="uid://dp0sg0p1gxpqy" path="res://assets/axe.png" id="3_g1dw6"]
+[ext_resource type="Texture2D" uid="uid://opx4gngg6ph" path="res://assets/axe-animation.png" id="4_yw30f"]
+[ext_resource type="AudioStream" uid="uid://3v7bhc1l5g4u" path="res://assets/impactWood_light_000.ogg" id="5_g6k8r"]
+[ext_resource type="AudioStream" uid="uid://8vtakcyg5hqf" path="res://assets/footstep_grass_004.ogg" id="5_qjkh3"]
+[ext_resource type="AudioStream" uid="uid://xhowhworrf5v" path="res://assets/hurt.wav" id="7_boad6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qjkh3"]
+radius = 6.0207973
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6k8r"]
+atlas = ExtResource("4_yw30f")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjkh3"]
+atlas = ExtResource("4_yw30f")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rkbax"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_g1dw6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g6k8r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qjkh3")
+}],
+"loop": false,
+"name": &"hit",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yw30f"]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g6k8r"]
+radius = 6.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 9
+script = ExtResource("1_oul6g")
+speed = 100.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_qjkh3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -4)
+texture = ExtResource("2_g1dw6")
+
+[node name="AxeMarker" type="Marker2D" parent="."]
+position = Vector2(0, -4)
+
+[node name="AxeAnimatedSprite" type="AnimatedSprite2D" parent="AxeMarker"]
+unique_name_in_owner = true
+z_index = 1
+y_sort_enabled = true
+position = Vector2(11, 0)
+sprite_frames = SubResource("SpriteFrames_rkbax")
+animation = &"hit"
+frame = 1
+frame_progress = 1.0
+
+[node name="HitBox" type="Area2D" parent="AxeMarker/AxeAnimatedSprite"]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="AxeMarker/AxeAnimatedSprite/HitBox"]
+unique_name_in_owner = true
+stream = ExtResource("5_g6k8r")
+
+[node name="HitCollision" type="CollisionShape2D" parent="AxeMarker/AxeAnimatedSprite/HitBox"]
+shape = SubResource("CircleShape2D_yw30f")
+
+[node name="HurtBox" type="Area2D" parent="."]
+position = Vector2(0, -6)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("CircleShape2D_g6k8r")
+
+[node name="WalkSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_qjkh3")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(0, -6)
+stream = ExtResource("7_boad6")
+
+[connection signal="animation_finished" from="AxeMarker/AxeAnimatedSprite" to="." method="_on_axe_animated_sprite_animation_finished"]
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
+[connection signal="body_entered" from="HurtBox" to="." method="_on_hurt_box_body_entered"]

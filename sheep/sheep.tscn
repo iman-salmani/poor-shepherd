@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://bthfj7fgcgi0"]
+
+[ext_resource type="Texture2D" uid="uid://cpjoblnkiwwt2" path="res://assets/sheep.png" id="1_5riea"]
+[ext_resource type="Script" uid="uid://ctsmn0ah55383" path="res://sheep/sheep.gd" id="1_8bfv8"]
+[ext_resource type="AudioStream" uid="uid://nthd7yai5e1h" path="res://assets/sheep_alert.wav" id="3_1385h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8bfv8"]
+radius = 7.071068
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1385h"]
+radius = 6.0827627
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vjvfl"]
+radius = 28.442924
+
+[node name="Sheep" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_8bfv8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_8bfv8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -6)
+texture = ExtResource("1_5riea")
+
+[node name="HurtBox" type="Area2D" parent="."]
+position = Vector2(0, -6)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("CircleShape2D_1385h")
+
+[node name="AlertSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_1385h")
+
+[node name="ScanArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScanArea"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_vjvfl")
+
+[connection signal="body_entered" from="HurtBox" to="." method="_on_hurt_box_body_entered"]
+[connection signal="body_entered" from="ScanArea" to="." method="_on_scan_area_body_entered"]

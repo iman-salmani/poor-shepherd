@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3 uid="uid://d0h0vbjvard7o"]
+
+[ext_resource type="Script" uid="uid://dvd37fj3ygf2q" path="res://wolf/wolf.gd" id="1_h8kq3"]
+[ext_resource type="Texture2D" uid="uid://wo8u4n0lh5b2" path="res://assets/wolf.png" id="1_nckbi"]
+[ext_resource type="AudioStream" uid="uid://drmcqmx2tnkhf" path="res://assets/wolf-howl.wav" id="3_iqvrd"]
+[ext_resource type="AudioStream" uid="uid://brqcj7ckgbfch" path="res://assets/EFX INT Dog Snarling 24 C.wav" id="4_fhlqq"]
+[ext_resource type="AudioStream" uid="uid://c04n2fv5t31hn" path="res://assets/EFX INT Mutt Growl 42 B.wav" id="4_p6wds"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iqvrd"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h8kq3"]
+radius = 7.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fhlqq"]
+radius = 39.051247
+
+[node name="Wolf" type="CharacterBody2D"]
+z_index = 1
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_h8kq3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -6)
+texture = ExtResource("1_nckbi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_iqvrd")
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_h8kq3")
+
+[node name="HostileArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HostileArea"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_fhlqq")
+
+[node name="DashCooldown" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="IdleSound" type="AudioStreamPlayer2D" parent="." groups=["enemy"]]
+stream = ExtResource("3_iqvrd")
+
+[node name="DashSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_p6wds")
+
+[node name="FollowSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_fhlqq")
+
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
+[connection signal="body_entered" from="HostileArea" to="." method="_on_hustile_area_body_entered"]
+[connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

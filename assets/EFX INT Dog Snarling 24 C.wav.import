@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://brqcj7ckgbfch"
+path="res://.godot/imported/EFX INT Dog Snarling 24 C.wav-bb76763cabb94e93d97af027e07aadae.sample"
+
+[deps]
+
+source_file="res://assets/EFX INT Dog Snarling 24 C.wav"
+dest_files=["res://.godot/imported/EFX INT Dog Snarling 24 C.wav-bb76763cabb94e93d97af027e07aadae.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
